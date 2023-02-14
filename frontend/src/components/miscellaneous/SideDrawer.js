@@ -117,6 +117,7 @@ const SideDrawer = () => {
       w="100%"
       p="5px 10px 5px 10px"
       borderWidth="5px"
+      bgColor="#128C7E"
     >
       <Tooltip label="Search users to Chat" hasArrow placement="bottom-end">
         <Button variant="ghost" onClick={onOpen}>
@@ -127,7 +128,7 @@ const SideDrawer = () => {
         </Button>
       </Tooltip>
 
-      <Text fontSize="2xl" fontFamily="Work sans">
+      <Text fontSize="2xl" fontFamily="Work sans" color="white">
         MERNAT
       </Text>
       <div>
@@ -137,7 +138,7 @@ const SideDrawer = () => {
               count={notification.length}
               effect={Effect.SCALE}
             />
-            <BellIcon fontSize="2xl" m={1} />
+            <BellIcon fontSize="2xl" m={1} color="white" />
           </MenuButton>
           <MenuList pl={2}>{!notification.length && "No New Messages"}
           {notification.map(notif => (
@@ -153,7 +154,7 @@ const SideDrawer = () => {
           </MenuList>
         </Menu>
         <Menu>
-          <MenuButton as={Button} bg="white" rightIcon={<ChevronDownIcon />}>
+          <MenuButton bgColor="#128C7E" as={Button} rightIcon={<ChevronDownIcon />}>
             <Avatar size='sm' cursor='pointer' name={user.name} src={user.pic} />
           </MenuButton>
           <MenuList>
@@ -166,19 +167,20 @@ const SideDrawer = () => {
         </Menu>
       </div>
     </Box>
-    <Drawer placement='left' onClose={onClose} isOpen={isOpen}>
+    <Drawer placement='left' onClose={onClose} isOpen={isOpen} >
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerHeader borderBottomWidth="1px">
+        <DrawerHeader borderBottomWidth="1px" color="black">
           Search User
         </DrawerHeader>
-        <DrawerBody>
+        <DrawerBody bgColor="#128C7E">
           <Box display="flex" pb={2}>
             <Input
               placeholder='Search by name or email'
               mr={2}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              bgColor="white"
             />
             <Button
             onClick={handleSearch}
