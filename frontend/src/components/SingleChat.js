@@ -24,7 +24,7 @@ import animationData from "../animations/loading.json";
 // const dec = require("../../../backend/decryter");
 // const crypto = require("crypto");
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://mernat.onrender.com";
 var socket, selectedChatCompare;
 
 
@@ -223,11 +223,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         flexDir="column"
                         justifyContent="flex-end"
                         p={3}
-                        bg="#E8E8E8"
+                        bgColor="#ECE5DD"
                         width="100%"
                         height="100%"
                         borderRadius="lg"
                         overflowY="hidden"
+                        
                     >
                         {loading ? (
                             <Spinner
@@ -261,7 +262,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     </Box>
                 </>
             ) : (
-                <Box display="flex" alignItems="center" justifyContent="center" h="100%">
+                    <Box display="flex" alignItems="center" justifyContent="center" h="100%">
                     <Text fontSize="3xl" pb={3} fontFamily="Work sans">
                         Click on a user to start chatting
                     </Text>

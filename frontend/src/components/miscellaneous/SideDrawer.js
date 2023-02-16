@@ -120,7 +120,7 @@ const SideDrawer = () => {
       bgColor="#128C7E"
     >
       <Tooltip label="Search users to Chat" hasArrow placement="bottom-end">
-        <Button variant="ghost" onClick={onOpen}>
+        <Button colorScheme='whatsapp' onClick={onOpen}>
           <i className="fas fa-search"></i>
           <Text display={{ base: "none", md: "flex" }} px={4}>
             Search User
