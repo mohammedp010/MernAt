@@ -114,7 +114,6 @@ const Login = () => {
         }}
         >
         Get Guest User Credentials
-        {/* Login */}
       </Button>
     </VStack>
   );

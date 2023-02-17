@@ -22,6 +22,7 @@ const GroupChatModal = ({ children }) => {
     const { user, chats, setChats } = ChatState();
 
     const handleSearch = async (query) => {
+        
         setSearch(query);
         if (!query) {
             return;
@@ -36,6 +37,19 @@ const GroupChatModal = ({ children }) => {
             };
 
             const { data } = await axios.get(`/api/user?search=${search}`, config);
+            console.log(data._id);
+            console.log(user._id);
+            // if(data._id === user._id)
+            // {
+            //     toast({
+            //         title: "Woah!",
+            //         description: "Why you want to add yourself?",
+            //         status: "error",
+            //         duration: 5000,
+            //         isClosable: true,
+            //         position: "bottom-left",
+            //     });
+            // }
             setLoading(false);
             setSearchResult(data);
         } catch (error) {
@@ -67,10 +81,25 @@ const GroupChatModal = ({ children }) => {
                     Authorization: `Bearer ${user.token}`,
                 },
             };
+            // if (!selectedChat.groupAdmin.some(item => item._id === user._id) && user1._id !== user._id)
+            // if(selectedUsers.some(item => item._id === user._id))
+            // {
+            //      toast({
+            //          title: "Woah!",
+            //          description: "Why you want to add yourself?",
+            //          status: "error",
+            //          duration: 5000,
+            //          isClosable: true,
+            //          position: "bottom-left",
+            //      });
+            // }
+            // console.log(selectedUsers.some(item => item._id === user._id));
+            // console.log(user._id);
+            // console.log(selectedUsers);
             const { data } = await axios.post("/api/chat/group", {
                 name: groupChatName,
                 users: JSON.stringify(selectedUsers.map((u) => u._id)),
-            }, 
+            },
             config
             );
             setChats([data, ...chats]);
@@ -152,7 +181,7 @@ const GroupChatModal = ({ children }) => {
 
                             {selectedUsers.map(u => (
                                 <UserBadgeItem
-                                    key={user._id}
+                                    key={u._id}
                                     user={u}
                                     handleFunction={() => handleDelete(u)}
                                 />

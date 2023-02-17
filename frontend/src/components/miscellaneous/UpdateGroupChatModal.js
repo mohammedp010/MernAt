@@ -36,6 +36,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
     const toast = useToast();
 
     const handleRemove = async (user1) => {
+        // console.log(selectedChat);
         if (selectedChat.groupAdmin._id !== user._id && user1._id !== user._id) {
             toast({
                 title: "Only admins can remove someone!",
@@ -213,7 +214,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain, fetchMessages}) => {
                         <Box width="100%" display="flex" flexWrap="wrap" pb={3}>
                             {selectedChat.users.map(u => (
                                 <UserBadgeItem
-                                    key={user._id}
+                                    key={u._id}
                                     user={u}
                                     handleFunction={() => handleRemove(u)}
                                 />

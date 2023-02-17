@@ -13,7 +13,7 @@ const HomePage = () => {
     if (user) {
       history.push('/chats');
     }
-  }, [history])
+  }, [history]);
 
   return <Container maxW='xl' centerContent>
     <Box 
