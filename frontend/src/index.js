@@ -8,6 +8,7 @@ import ChatProvider from './Context/ChatProvider';
 
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
+
 ReactDOM.render(
   <BrowserRouter>
     <ChatProvider>
