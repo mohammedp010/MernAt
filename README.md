@@ -14,7 +14,17 @@ MongoDB, Expressjs, React(ChakraUI), Nodejs
    </a>
 </p> -->
 
+## Features
+
+- User Registration: Users can create an account by providing their basic information and securely authenticate themselves for future logins.
+- One-to-One Chat: Registered users can initiate private conversations with other registered users by searching for their username and starting a chat.
+- Group Chat: Users can join or create multiple chat groups and engage in discussions with other participants in real-time.
+- Real-time Messaging: The application leverages websockets to enable instant message delivery, ensuring a smooth and seamless chat experience.
+- User Status: Users can set their online/offline status to indicate their availability for chat.
+
+
 > MERN is a fullstack implementation in MongoDB, Expressjs, React/Redux, Nodejs.
+
 
 MERN stack is the idea of using Javascript/Node for fullstack web development.
 
@@ -92,14 +102,12 @@ socket.io: ^4.5.4 | socket.io-client: "^4.5.4"
 
 # Screenshots of this project
 
-User visit public and Home page
-![User visit public and Home page](http://i.imgur.com/ORCGHHY.png)
+User visit Chats Home page
+![User visit public and Home page](https://drive.google.com/file/d/1N-OWEY9n62acfinB79HRf5xwFKrb-dzX/view?usp=share_link)
 
 User can sign in or sign up
-![User can sign in or sign up](http://i.imgur.com/rrmbU5I.png)
+![User can sign in or sign up](https://drive.google.com/file/d/1NKAi0Oek11ybJWN5XHgUV2iiMXNZOH9u/view?usp=share_link)
 
-After signing in user can go to account route and make request to token-protected API endpoint
-![After signing in user can go to account route](http://i.imgur.com/FzLB51u.png)
 
 ## Standard
 
@@ -107,16 +115,9 @@ After signing in user can go to account route and make request to token-protecte
 
 ## BUGs or comments
 
-[Create new Issues](https://github.com/amazingandyyy/mern/issues) (preferred)
+[Create new Issues](https://github.com/mohammedp010/MernAt/issues) (preferred)
 
-Email Me: amazingandyyy@gmail.com (welcome, say hi)
+Email Me: mohammedpatrawala1@gmail.com
 
 ## Author
-[Amazingandyyy](https://amazingandyyy.com)
-
-I recently launch my monthly mentorship program, feel free to reach out and see what we can grow together:
-
-<a href="https://mentorcruise.com/mentor/andychen/"> <img src="https://cdn.mentorcruise.com/img/banner/fire-sm.svg" width="240" alt="MentorCruise"> </a>
-
-### License
-[MIT](https://github.com/amazingandyyy/mern/blob/master/LICENSE)
+[Mohammed Patrawala]
