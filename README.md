@@ -120,4 +120,4 @@ User can sign in or sign up
 Email Me: mohammedpatrawala1@gmail.com
 
 ## Author
-[Mohammed Patrawala]
+Mohammed Patrawala
