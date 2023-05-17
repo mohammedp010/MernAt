@@ -20,7 +20,6 @@ MongoDB, Expressjs, React(ChakraUI), Nodejs
 - One-to-One Chat: Registered users can initiate private conversations with other registered users by searching for their username and starting a chat.
 - Group Chat: Users can join or create multiple chat groups and engage in discussions with other participants in real-time.
 - Real-time Messaging: The application leverages websockets to enable instant message delivery, ensuring a smooth and seamless chat experience.
-- User Status: Users can set their online/offline status to indicate their availability for chat.
 
 
 > MERN is a fullstack implementation in MongoDB, Expressjs, React/Redux, Nodejs.
