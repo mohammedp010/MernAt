@@ -1,5 +1,5 @@
 <h1 align="center">
-🌐 MERN Stack
+🌐 MernAt
 </h1>
 <p align="center">
 MongoDB, Expressjs, React(ChakraUI), Nodejs
