@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { ChatState } from '../Context/ChatProvider';
-import { Box, Stack, Text } from '@chakra-ui/layout';
-import { useToast } from '@chakra-ui/react';
-import { Button } from '@chakra-ui/button';
-import { AddIcon } from '@chakra-ui/icons';
+import React, { useState, useEffect } from "react";
+import { ChatState } from "../Context/ChatProvider";
+import { Box, Stack, Text } from "@chakra-ui/layout";
+import { Avatar, Tooltip, useToast } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/button";
+import { AddIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import ChatLoading from "./ChatLoading";
-import { getSender } from '../config/ChatLogics'
-import GroupChatModal from './miscellaneous/GroupChatModal';
+import { getSender } from "../config/ChatLogics";
+import GroupChatModal from "./miscellaneous/GroupChatModal";
 
-const MyChats = ({fetchAgain}) => {
+const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
   const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
   const toast = useToast();
@@ -45,7 +45,6 @@ const MyChats = ({fetchAgain}) => {
   //   setLoggedUser(JSON.parse(localStorage.getItem("userInfo")))
   //   fetchChats();
   // }, [fetchAgain]);
-
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
@@ -72,17 +71,15 @@ const MyChats = ({fetchAgain}) => {
       >
         My Chats
         <GroupChatModal>
-
           <Button
             display="flex"
             fontSize={{ base: "17px", md: "10px", lg: "17px" }}
             rightIcon={<AddIcon />}
-            colorScheme='whatsapp'
+            colorScheme="whatsapp"
           >
             New Group Chat
           </Button>
         </GroupChatModal>
-
       </Box>
 
       <Box
@@ -102,26 +99,50 @@ const MyChats = ({fetchAgain}) => {
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? "#25D366" : "#DCF8C6"}
+                bg={
+                  selectedChat === chat
+                    ? "#25D366"
+                    : chat.isGroupChat
+                    ? "#83be57"
+                    : "#DCF8C6"
+                }
                 color={selectedChat === chat ? "black" : "black"}
                 px={3}
                 py={2}
                 borderRadius="lg"
                 key={chat._id}
               >
+                {!chat.isGroupChat && (
+                  <Tooltip
+                    // label={m.sender.name}
+                    placement="bottom-start"
+                    hasArrow
+                  >
+                    {/* // <Text>{m.sender.name} */}
+                    <Avatar
+                      mt="7px"
+                      mr={1}
+                      size="sm"
+                      cursor="pointer"
+                      name={getSender(loggedUser, chat.users)}
+                      src={chat.users[1].pic}
+                    />
+                    {/* // </Text> */}
+                  </Tooltip>
+                )}
                 <Text>
-                  {!chat.isGroupChat ? 
-                    getSender(loggedUser, chat.users)
-                   : chat.chatName}
+                  {!chat.isGroupChat
+                    ? getSender(loggedUser, chat.users)
+                    : chat.chatName}
+                </Text>
+                {chat.latestMessage && (
+                  <Text fontSize="xs">
+                    <b>{chat.latestMessage.sender.name} : </b>
+                    {chat.latestMessage.content.length > 50
+                      ? chat.latestMessage.content.substring(0, 51) + "..."
+                      : chat.latestMessage.content}
                   </Text>
-                  {chat.latestMessage && (
-                    <Text fontSize="xs">
-                      <b>{chat.latestMessage.sender.name} : </b>
-                      {chat.latestMessage.content.length > 50
-                        ? chat.latestMessage.content.substring(0, 51) + "..."
-                        : chat.latestMessage.content}
-                  </Text>
-                  )}
+                )}
               </Box>
             ))}
           </Stack>
@@ -133,4 +154,4 @@ const MyChats = ({fetchAgain}) => {
   );
 };
 
-export default MyChats
+export default MyChats;
