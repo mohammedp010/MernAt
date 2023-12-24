@@ -9,6 +9,7 @@ import {
   TabPanels,
   Tabs,
   Link,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import Login from "../components/authentication/Login";
 import Signup from "../components/authentication/Signup";
@@ -18,6 +19,7 @@ import { OwnerModal } from "../components/ownerModal/ownerModal";
 
 const HomePage = () => {
   const history = useHistory();
+  const isMobile = useBreakpointValue({ base: true, md: false });
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -28,7 +30,7 @@ const HomePage = () => {
 
   return (
     <>
-      <Container maxW="xl" mr="10" mt="14" centerContent>
+      <Container maxW="xl" mr={!isMobile ? "10" : ""} mt="14" centerContent>
         <Box
           display="flex"
           justifyContent="center"
@@ -66,16 +68,19 @@ const HomePage = () => {
             </TabPanels>
           </Tabs>
         </Box>
-        {/* <div>
-        <OwnerModal />
-      </div> */}
-      </Container>
-        <Text mt="4" mb="0" mr="10" color="#F0F3F4">
+        {isMobile && <Text mt="60" mr="20" ml="3" color="#F0F3F4" whiteSpace="nowrap" fontSize="12">
           Designed and Developed by{" "}
           <Link color="#FFF" textDecoration="underline" href="https://linktr.ee/mohammed_sd">
             Mohammed Patrawala
           </Link>
-        </Text>
+        </Text>}
+      </Container>
+        {!isMobile && <Text mt="4" mb="0" mr="10" color="#F0F3F4">
+          Designed and Developed by{" "}
+          <Link color="#FFF" textDecoration="underline" href="https://linktr.ee/mohammed_sd">
+            Mohammed Patrawala
+          </Link>
+        </Text>}
     </>
   );
 };
