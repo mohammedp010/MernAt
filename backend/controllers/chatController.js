@@ -65,6 +65,25 @@ const fetchChats = asyncHandler(async (req, res) => {
     }
 });
 
+const deleteChat = asyncHandler(async (req,res) => {
+    const { chatId } = req.body;
+
+  try {
+    const chat = await Chat.findById(chatId);
+
+    if (!chat) {
+      return res.status(404).json({ error: 'Chat not found' });
+    }
+
+    await chat.remove();
+
+    return res.status(200).json({ message: 'Chat deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
+
 const createGroupChat = asyncHandler( async (req,res) => {
     if(!req.body.users || !req.body.name){
         return res.status(400).send({ message: 'Please fill all the required fields' });
@@ -175,7 +194,8 @@ const removeFromGroup = asyncHandler(async (req, res) => {
 
 module.exports = { 
     accessChat, 
-    fetchChats, 
+    fetchChats,
+    deleteChat, 
     createGroupChat, 
     renameGroup,
     addToGroup,

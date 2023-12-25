@@ -1,7 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import { Box, Stack, Text } from "@chakra-ui/layout";
-import { Avatar, Tooltip, useToast } from "@chakra-ui/react";
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Avatar,
+  Image,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Tooltip,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
 import { AddIcon } from "@chakra-ui/icons";
 import axios from "axios";
@@ -12,6 +28,8 @@ import GroupChatModal from "./miscellaneous/GroupChatModal";
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
   const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = React.useRef();
   const toast = useToast();
 
   const fetchChats = async () => {
@@ -36,15 +54,52 @@ const MyChats = ({ fetchAgain }) => {
     }
   };
 
+  const deleteChat = async (chatId) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const response = await axios.delete("api/chat/", {
+        ...config,
+        data: { chatId },
+      });
+
+      if (response.status === 200) {
+        setChats((prevChats) =>
+          prevChats.filter((chat) => chat._id !== chatId)
+        );
+        onClose();
+        toast({
+          title: "Deleted!",
+          description: "Chat deleted successfully!",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting chat:", error);
+
+      toast({
+        title: "Error Occurred",
+        description: "Failed to delete the chat",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
     // eslint-disable-next-line
   }, [fetchAgain]);
-  // useEffect(() => {
-  //   setLoggedUser(JSON.parse(localStorage.getItem("userInfo")))
-  //   fetchChats();
-  // }, [fetchAgain]);
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
@@ -56,7 +111,7 @@ const MyChats = ({ fetchAgain }) => {
       width={{ base: "100%", md: "31%" }}
       borderRadius="lg"
       borderWidth="1px"
-      bgColor="#ECE5DD"
+      bgColor="#C9D1D5"
     >
       <Box
         pb={3}
@@ -67,7 +122,7 @@ const MyChats = ({ fetchAgain }) => {
         width="100%"
         justifyContent="space-between"
         alignItems="center"
-        bgColor="#ECE5DD"
+        bgColor="#C9D1D5"
       >
         My Chats
         <GroupChatModal>
@@ -75,7 +130,8 @@ const MyChats = ({ fetchAgain }) => {
             display="flex"
             fontSize={{ base: "17px", md: "10px", lg: "17px" }}
             rightIcon={<AddIcon />}
-            colorScheme="whatsapp"
+            // colorScheme="whatsapp"
+            bgColor="#55C2C3"
           >
             New Group Chat
           </Button>
@@ -91,52 +147,122 @@ const MyChats = ({ fetchAgain }) => {
         height="100%"
         borderRadius="lg"
         overflowY="hidden"
-        bgColor="#128C7E"
+        bgColor="#C9D1D5"
       >
         {chats ? (
           <Stack overflowY="scroll">
             {chats.map((chat) => (
               <Box
+                key={chat._id}
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
+                position="relative"
+                borderRadius="lg"
                 bg={
                   selectedChat === chat
-                    ? "#25D366"
-                    : chat.isGroupChat
-                    ? "#83be57"
-                    : "#DCF8C6"
+                    ? "#0C243C"
+                    : // : chat.isGroupChat
+                      // ? "#83be57"
+                      "#55C2C3"
                 }
-                color={selectedChat === chat ? "black" : "black"}
+                color={selectedChat === chat ? "white" : "#465255"}
                 px={3}
                 py={2}
-                borderRadius="lg"
-                key={chat._id}
+                transition="background-color 0.3s ease, color 0.3s ease"
+                opacity={chats.includes(chat) ? 1 : 0}
               >
-                {!chat.isGroupChat && (
-                  <Tooltip
-                    // label={m.sender.name}
-                    placement="bottom-start"
-                    hasArrow
-                  >
-                    {/* // <Text>{m.sender.name} */}
-                    <Avatar
-                      mt="7px"
-                      mr={1}
-                      size="sm"
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    position: "relative",
+                  }}
+                >
+                  {!chat.isGroupChat && (
+                    <Tooltip placement="bottom-start" hasArrow display="flex">
+                      <Avatar
+                        mt="7px"
+                        mr={1}
+                        size="sm"
+                        cursor="pointer"
+                        name={getSender(loggedUser, chat.users)}
+                        src={chat.users[1].pic}
+                      />
+                    </Tooltip>
+                  )}
+                  <Menu isLazy placement="left-end">
+                    <MenuButton
+                      as={Box}
+                      position="absolute"
+                      right="5px"
+                      top="5px"
                       cursor="pointer"
-                      name={getSender(loggedUser, chat.users)}
-                      src={chat.users[1].pic}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      <Image
+                        src={
+                          selectedChat === chat ? "dotswhite.png" : "dots.png"
+                        }
+                        h="4"
+                        w="4"
+                      />
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem color="black" onClick={onOpen}>
+                        Delete Chat
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                  <AlertDialog
+                    isOpen={isOpen}
+                    leastDestructiveRef={cancelRef}
+                    onClose={onClose}
+                  >
+                    <AlertDialogOverlay>
+                      <AlertDialogContent>
+                        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                          Delete Chat
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                          Are you sure? You can't undo this action afterwards.
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                          <Button ref={cancelRef} onClick={onClose}>
+                            Cancel
+                          </Button>
+                          <Button
+                            colorScheme="red"
+                            onClick={() => deleteChat(chat._id)}
+                            ml={3}
+                          >
+                            Delete
+                          </Button>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialogOverlay>
+                  </AlertDialog>
+                  <Text mt={!chat.isGroupChat && "2.5"}>
+                    {!chat.isGroupChat
+                      ? getSender(loggedUser, chat.users)
+                      : chat.chatName}
+                  </Text>
+                  {chat.isGroupChat && (
+                    <Image
+                      position="absolute"
+                      right="6"
+                      mt="1"
+                      src="groupchatlogo.png"
+                      h="4"
+                      w="4"
                     />
-                    {/* // </Text> */}
-                  </Tooltip>
-                )}
-                <Text>
-                  {!chat.isGroupChat
-                    ? getSender(loggedUser, chat.users)
-                    : chat.chatName}
-                </Text>
+                  )}
+                </div>
                 {chat.latestMessage && (
-                  <Text fontSize="xs">
+                  <Text fontSize="xs" mt="2">
                     <b>{chat.latestMessage.sender.name} : </b>
                     {chat.latestMessage.content.length > 50
                       ? chat.latestMessage.content.substring(0, 51) + "..."

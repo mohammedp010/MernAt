@@ -1,10 +1,9 @@
-import React from 'react';
+import React from "react";
 import { ChatState } from "../Context/ChatProvider";
 import { Box } from "@chakra-ui/layout";
-import SingleChat from './SingleChat';
+import SingleChat from "./SingleChat";
 
-const ChatBox = ( { fetchAgain, setFetchAgain }) => {
-
+const ChatBox = ({ fetchAgain, setFetchAgain }) => {
   const { selectedChat } = ChatState();
 
   return (
@@ -13,7 +12,7 @@ const ChatBox = ( { fetchAgain, setFetchAgain }) => {
       alignItems="center"
       flexDir="column"
       p={3}
-      bgColor="#ECE5DD"
+      bgColor="#C9D1D5"
       width={{ base: "100%", md: "68%" }}
       borderRadius="lg"
       borderWidth="1px"
@@ -23,4 +22,4 @@ const ChatBox = ( { fetchAgain, setFetchAgain }) => {
   );
 };
 
-export default ChatBox
+export default ChatBox;

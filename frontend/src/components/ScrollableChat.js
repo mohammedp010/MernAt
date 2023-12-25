@@ -36,8 +36,9 @@ const ScrollableChat = ({ messages }) => {
             <span
               style={{
                 backgroundColor: `${
-                  m.sender._id === user._id ? "#BEE3F8" : "#89F5D0"
+                  m.sender._id === user._id ? "#BEE3F8" : "#2F5C75"
                 }`,
+                color: `${m.sender._id === user._id ? "#000" : "#FFF"}`,
                 borderRadius: "20px",
                 padding: "5px 15px",
                 maxWidth: "75%",
