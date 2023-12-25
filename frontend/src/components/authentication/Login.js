@@ -18,7 +18,6 @@ const Login = () => {
   const handleClick = () => setShow(!show);
 
   const submitHandler = async () => {
-
     setLoading(true);
     if (!email || !password) {
       toast({
@@ -76,7 +75,9 @@ const Login = () => {
         <FormLabel>Email</FormLabel>
         <Input
           placeholder="Your Email"
-          value = {email}
+          borderWidth="2px"
+          borderColor="#000"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
@@ -85,39 +86,41 @@ const Login = () => {
         <InputGroup>
           <Input
             type={show ? "text" : "password"}
-            value = {password}
+            borderWidth="2px"
+            borderColor="#000"
+            value={password}
             placeholder="Your Password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
+            <Button h="1.75rem" mr="1" size="sm" borderWidth="2px" borderColor="#000" onClick={handleClick}>
               {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
         </InputGroup>
       </FormControl>
       <Button
-        colorScheme = "blue"
+        colorScheme="blue"
         width="100%"
-        style={{marginTop: 15}}
-        onClick = {submitHandler}
-        isLoading = {loading}
-        >
+        style={{ marginTop: 15 }}
+        onClick={submitHandler}
+        isLoading={loading}
+      >
         Login
       </Button>
       <Button
         variant="solid"
         colorScheme="green"
         width="100%"
-        onClick = {() => {
+        onClick={() => {
           setEmail("guest@example.com");
           setPassword("123456");
         }}
-        >
+      >
         Get Guest User Credentials
       </Button>
     </VStack>
   );
 };
 
-export default Login
+export default Login;

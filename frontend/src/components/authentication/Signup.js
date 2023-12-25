@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   FormLabel,
   VStack,
@@ -9,8 +9,8 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useToast } from '@chakra-ui/react';  
-import {useHistory} from 'react-router-dom';
+import { useToast } from "@chakra-ui/react";
+import { useHistory } from "react-router-dom";
 
 const Signup = () => {
   const [show, setShow] = useState(false);
@@ -27,8 +27,7 @@ const Signup = () => {
 
   const postDetails = (pics) => {
     setLoading(true);
-    if(pics === undefined)
-    {
+    if (pics === undefined) {
       toast({
         title: "Please select an Image!",
         status: "warning",
@@ -38,24 +37,26 @@ const Signup = () => {
       });
       return;
     }
-    if (pics.type === "image/jpeg" || pics.type === "image/png"){
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
-      data.append("upload_preset","mernat");
-      data.append("cloud_name","dmu7ghlqo");
-      fetch("https://api.cloudinary.com/v1_1/dmu7ghlqo/image/upload",{
-        method: "post", 
+      data.append("upload_preset", "mernat");
+      data.append("cloud_name", "dmu7ghlqo");
+      fetch("https://api.cloudinary.com/v1_1/dmu7ghlqo/image/upload", {
+        method: "post",
         body: data,
-      }).then((res) => res.json())
-      .then((data) => {
-        setPic(data.url.toString());
-        console.log(data.url.toString());
-        setLoading(false);
-      }).catch((err) => {
-        console.log(err);
-        setLoading(false);
-    });
-    }else{
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPic(data.url.toString());
+          console.log(data.url.toString());
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
       toast({
         title: "Please select an Image!",
         status: "warning",
@@ -93,16 +94,17 @@ const Signup = () => {
       return;
     }
 
-    try{
+    try {
       const config = {
         headers: {
           "Content-Type": "application/json",
         },
       };
 
-      const { data } = await axios.post("/api/user",
-      {name,email,password,pic},
-      config
+      const { data } = await axios.post(
+        "/api/user",
+        { name, email, password, pic },
+        config
       );
       console.log(data);
       toast({
@@ -113,10 +115,10 @@ const Signup = () => {
         position: "bottom",
       });
 
-      localStorage.setItem('userInfo', JSON.stringify(data));
+      localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
       history.push("/chats");
-    }catch(error){
+    } catch (error) {
       toast({
         title: "Error Occured!",
         description: error.response.data.message,
@@ -134,6 +136,8 @@ const Signup = () => {
         <FormLabel>Name</FormLabel>
         <Input
           placeholder="Your Name"
+          borderWidth="2px"
+          borderColor="#000"
           onChange={(e) => setName(e.target.value)}
         />
       </FormControl>
@@ -141,6 +145,8 @@ const Signup = () => {
         <FormLabel>Email</FormLabel>
         <Input
           placeholder="Your Email"
+          borderWidth="2px"
+          borderColor="#000"
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
@@ -149,11 +155,13 @@ const Signup = () => {
         <InputGroup>
           <Input
             type={show ? "text" : "password"}
+            borderWidth="2px"
+            borderColor="#000"
             placeholder="Your Password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
+            <Button h="1.75rem" mr="1" size="sm" borderWidth="2px" borderColor="#000" onClick={handleClick}>
               {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
@@ -165,11 +173,13 @@ const Signup = () => {
         <InputGroup>
           <Input
             type={show ? "text" : "password"}
+            borderWidth="2px"
+            borderColor="#000"
             placeholder="Confirm Password"
             onChange={(e) => setConfirmpassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
+            <Button h="1.75rem" mr="1" size="sm" borderWidth="2px" borderColor="#000" onClick={handleClick}>
               {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
@@ -179,17 +189,19 @@ const Signup = () => {
         <FormLabel>Upload your photo (Optional)</FormLabel>
         <Input
           type="file"
-          p={1.5}
+          borderWidth="2px"
+          borderColor="#000"
+          p={0.5}
           accept="image/*"
           onChange={(e) => postDetails(e.target.files[0])}
         />
       </FormControl>
       <Button
-        colorScheme = "blue"
+        colorScheme="blue"
         width="100%"
-        style={{marginTop: 15}}
-        onClick = {submitHandler}
-        isLoading = {loading}
+        style={{ marginTop: 15 }}
+        onClick={submitHandler}
+        isLoading={loading}
       >
         Sign Up
       </Button>

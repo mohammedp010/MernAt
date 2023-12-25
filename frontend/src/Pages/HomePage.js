@@ -38,8 +38,7 @@ const HomePage = () => {
           w="100%"
           m="40px 0 15px 0"
           borderRadius="lg"
-          borderWidth="1px"
-          bgColor="#ECE5DD"
+          bgColor="#C9D1D5"
         >
           <Text
             fontSize="4xl"
@@ -50,7 +49,7 @@ const HomePage = () => {
             MERNAT
           </Text>
         </Box>
-        <Box bg="white" w="100%" p={4} borderRadius="lg" borderWidth="1px">
+        <Box bg="white" w="100%" p={4} borderRadius="lg" bgColor="#C9D1D5">
           <Tabs variant="soft-rounded">
             <TabList mb="1em">
               <Tab width="50%">Login</Tab>
