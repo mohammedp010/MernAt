@@ -22,7 +22,7 @@ import { Button } from "@chakra-ui/button";
 import { AddIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import ChatLoading from "./ChatLoading";
-import { getSender } from "../config/ChatLogics";
+import { getSender, getSenderPic } from "../config/ChatLogics";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
 import io from "socket.io-client";
 
@@ -284,7 +284,7 @@ const MyChats = ({ fetchAgain, setIsFetchAgain }) => {
                         size="sm"
                         cursor="pointer"
                         name={getSender(loggedUser, chat.users)}
-                        src={chat.users[1].pic}
+                        src={getSenderPic(loggedUser, chat.users)}
                       />
                     </Tooltip>
                   )}
