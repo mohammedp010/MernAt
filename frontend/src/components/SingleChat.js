@@ -13,21 +13,11 @@ import ScrollableChat from "./ScrollableChat";
 import io from "socket.io-client";
 import Lottie from "react-lottie";
 import animationData from "../animations/loading.json";
-// import { Buffer } from "buffer";
-// import * as Buffer from "buffer";
-// import { Buffers } from '@react-frontend-developer/buffers';
-// window.Buffer = buffer.Buffer;
+import CryptoJS from "crypto-js";
 
-// Buffer.from("anything", "base64");
-// window.Buffer = window.Buffer || require("buffer").Buffer;
-// import decryter.js from "../../../backend/decryter";
-// const dec = require("../../../backend/decryter");
-// const crypto = require("crypto");
 
 const ENDPOINT = "https://mernat.onrender.com";
 var socket, selectedChatCompare;
-
-// const iv = crypto.randomBytes(16);
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
@@ -100,24 +90,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
           config
         );
-        // console.log(data);
-        // // data.content = dec.dec(data);
-        // let msg = Buffer.from(data.iv, 'base64')
-        // console.log("96");
-        // console.log(msg);
-        // const decipher = crypto.createDecipheriv(algorithm, key, msg);
-        // let decryptedData = decipher.update(data.content, "hex", "utf-8");
-        // console.log("100");
-        // decryptedData += decipher.final("utf-8");
-        // console.log("102");
-        // data.content = decryptedData
-        // console.log(data.content);
+        // Decrypt the message content
+        const secretKey = process.env.REACT_APP_CRYPT_KEY;
+        const bytes = CryptoJS.AES.decrypt(data.content, secretKey);
+        const originalContent = bytes.toString(CryptoJS.enc.Utf8);
+        data.content = originalContent;
 
-        socket.emit("new message", data);
+        // Update the messages state with the decrypted message
+        socket.emit('new message', data);
         setMessages([...messages, data]);
       } catch (error) {
         toast({
-          title: "Error Occured!",
+          title: "Error Occurred!",
           description: "Failed to send the Message",
           status: "error",
           duration: 5000,

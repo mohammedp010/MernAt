@@ -25,6 +25,7 @@ import ChatLoading from "./ChatLoading";
 import { getSender, getSenderPic } from "../config/ChatLogics";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
 import io from "socket.io-client";
+import CryptoJS from "crypto-js";
 
 const MyChats = ({ fetchAgain, setIsFetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
@@ -56,67 +57,6 @@ const MyChats = ({ fetchAgain, setIsFetchAgain }) => {
       });
     }
   };
-
-  // const deleteChat = async (chat,chatId) => {
-  //   if(chat.isGroupChat)
-  //   {
-  //     if(chat.groupAdmin._id !== user._id)
-  //     {
-  //       toast({
-  //         title: "Can't delete",
-  //         description: "Only admin can delete the group chat!",
-  //         status: "error",
-  //         duration: 5000,
-  //         isClosable: true,
-  //         position: "bottom",
-  //       });
-  //       onClose();
-  //       return;
-  //     }
-  //   }
-  //   else{
-  //     try {
-  //       const config = {
-  //         headers: {
-  //           Authorization: `Bearer ${user.token}`,
-  //         },
-  //       };
-
-  //       const response = await axios.delete("api/chat/", {
-  //         ...config,
-  //         data: { chatId },
-  //       });
-
-  //       if (response.status === 200) {
-  //         setChats((prevChats) =>
-  //             prevChats.filter((chat) => chat._id !== chatId)
-  //         );
-  //         // setIsFetchAgain(true);
-  //         // // fetchAgain(true);
-  //         onClose();
-  //         toast({
-  //           title: "Deleted!",
-  //           description: "Chat deleted successfully!",
-  //           status: "success",
-  //           duration: 5000,
-  //           isClosable: true,
-  //           position: "bottom-left",
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error("Error deleting chat:", error);
-
-  //       toast({
-  //         title: "Error Occurred",
-  //         description: "Failed to delete the chat",
-  //         status: "error",
-  //         duration: 5000,
-  //         isClosable: true,
-  //         position: "bottom-left",
-  //       });
-  //     }
-  //   }
-  // };
 
   const deleteChatApi = async (chatId) => {
     if (selectedChat.isGroupChat) {
@@ -190,6 +130,18 @@ const MyChats = ({ fetchAgain, setIsFetchAgain }) => {
     } catch (error) {
       console.error("Failed to delete chat:", error);
     }
+  };
+
+  const handleLatestMessageDecrypt = (content) => {
+    const secretKey = process.env.REACT_APP_CRYPT_KEY;
+    const bytes = CryptoJS.AES.decrypt(content, secretKey);
+    const originalContent = bytes.toString(CryptoJS.enc.Utf8);
+    if(originalContent.length > 50)
+    {
+      content = originalContent.substring(0, 51) + "...";
+    }
+    content = originalContent;
+    return content;
   };
 
   useEffect(() => {
@@ -360,8 +312,10 @@ const MyChats = ({ fetchAgain, setIsFetchAgain }) => {
                       position="absolute"
                       right="6"
                       mt="1"
-                      src="groupchatlogo.png"
-                      h="4"
+                      src={
+                        selectedChat === chat ? "groupchatlogowhite.png" : "groupchatlogo.png"
+                      }
+                      h="4" 
                       w="4"
                     />
                   )}
@@ -369,9 +323,7 @@ const MyChats = ({ fetchAgain, setIsFetchAgain }) => {
                 {chat.latestMessage && (
                   <Text fontSize="xs" mt="2">
                     <b>{chat.latestMessage.sender.name} : </b>
-                    {chat.latestMessage.content.length > 50
-                      ? chat.latestMessage.content.substring(0, 51) + "..."
-                      : chat.latestMessage.content}
+                    {handleLatestMessageDecrypt(chat.latestMessage.content)}
                   </Text>
                 )}
               </Box>
