@@ -24,11 +24,14 @@ import axios from "axios";
 import ChatLoading from "./ChatLoading";
 import { getSender } from "../config/ChatLogics";
 import GroupChatModal from "./miscellaneous/GroupChatModal";
+import io from "socket.io-client";
 
-const MyChats = ({ fetchAgain }) => {
+const MyChats = ({ fetchAgain, setIsFetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
   const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [socket, setSocket] = useState(null);
+  const [socketConnected, setSocketConnected] = useState(false);
   const cancelRef = React.useRef();
   const toast = useToast();
 
@@ -54,7 +57,82 @@ const MyChats = ({ fetchAgain }) => {
     }
   };
 
-  const deleteChat = async (chatId) => {
+  // const deleteChat = async (chat,chatId) => {
+  //   if(chat.isGroupChat)
+  //   {
+  //     if(chat.groupAdmin._id !== user._id)
+  //     {
+  //       toast({
+  //         title: "Can't delete",
+  //         description: "Only admin can delete the group chat!",
+  //         status: "error",
+  //         duration: 5000,
+  //         isClosable: true,
+  //         position: "bottom",
+  //       });
+  //       onClose();
+  //       return;
+  //     }
+  //   }
+  //   else{
+  //     try {
+  //       const config = {
+  //         headers: {
+  //           Authorization: `Bearer ${user.token}`,
+  //         },
+  //       };
+
+  //       const response = await axios.delete("api/chat/", {
+  //         ...config,
+  //         data: { chatId },
+  //       });
+
+  //       if (response.status === 200) {
+  //         setChats((prevChats) =>
+  //             prevChats.filter((chat) => chat._id !== chatId)
+  //         );
+  //         // setIsFetchAgain(true);
+  //         // // fetchAgain(true);
+  //         onClose();
+  //         toast({
+  //           title: "Deleted!",
+  //           description: "Chat deleted successfully!",
+  //           status: "success",
+  //           duration: 5000,
+  //           isClosable: true,
+  //           position: "bottom-left",
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error("Error deleting chat:", error);
+
+  //       toast({
+  //         title: "Error Occurred",
+  //         description: "Failed to delete the chat",
+  //         status: "error",
+  //         duration: 5000,
+  //         isClosable: true,
+  //         position: "bottom-left",
+  //       });
+  //     }
+  //   }
+  // };
+
+  const deleteChatApi = async (chatId) => {
+    if (selectedChat.isGroupChat) {
+      if (selectedChat.groupAdmin._id !== user._id) {
+        toast({
+          title: "Can't delete",
+          description: "Only admin can delete the group chat!",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+        onClose();
+        return;
+      }
+    }
     try {
       const config = {
         headers: {
@@ -66,12 +144,16 @@ const MyChats = ({ fetchAgain }) => {
         ...config,
         data: { chatId },
       });
-
       if (response.status === 200) {
-        setChats((prevChats) =>
-          prevChats.filter((chat) => chat._id !== chatId)
-        );
+        // setChats((prevChats) =>
+        //   prevChats.filter((chat) => chat._id !== chatId)
+        // );
+        // setIsFetchAgain(true);
+        // // fetchAgain(true);
+
         onClose();
+        const updatedChats = chats.filter((chat) => chat._id !== chatId);
+        setChats(updatedChats);
         toast({
           title: "Deleted!",
           description: "Chat deleted successfully!",
@@ -81,9 +163,8 @@ const MyChats = ({ fetchAgain }) => {
           position: "bottom-left",
         });
       }
+      return response.data;
     } catch (error) {
-      console.error("Error deleting chat:", error);
-
       toast({
         title: "Error Occurred",
         description: "Failed to delete the chat",
@@ -92,6 +173,22 @@ const MyChats = ({ fetchAgain }) => {
         isClosable: true,
         position: "bottom-left",
       });
+      console.error(
+        "Error deleting chat:",
+        error.response ? error.response.data : error.message
+      );
+      throw error; // You can handle the error further up in your code
+    }
+  };
+
+  const handleDeleteChat = async (chatId) => {
+    console.log(chatId);
+    try {
+      await deleteChatApi(chatId);
+      // Filter out the deleted chat from the chats list
+      console.log("Chat deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete chat:", error);
     }
   };
 
@@ -100,6 +197,7 @@ const MyChats = ({ fetchAgain }) => {
     fetchChats();
     // eslint-disable-next-line
   }, [fetchAgain]);
+
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
@@ -197,9 +295,9 @@ const MyChats = ({ fetchAgain }) => {
                       right="5px"
                       top="5px"
                       cursor="pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
+                      // onClick={(e) => {
+                      //   e.stopPropagation();
+                      // }}
                     >
                       <Image
                         src={
@@ -210,7 +308,14 @@ const MyChats = ({ fetchAgain }) => {
                       />
                     </MenuButton>
                     <MenuList>
-                      <MenuItem color="black" onClick={onOpen}>
+                      <MenuItem
+                        color="black"
+                        onClick={() => {
+                          setSelectedChat(chat); // Set the selected chat
+                          onOpen(); // Open the delete confirmation dialog
+                          console.log(selectedChat);
+                        }}
+                      >
                         Delete Chat
                       </MenuItem>
                     </MenuList>
@@ -236,7 +341,7 @@ const MyChats = ({ fetchAgain }) => {
                           </Button>
                           <Button
                             colorScheme="red"
-                            onClick={() => deleteChat(chat._id)}
+                            onClick={() => handleDeleteChat(selectedChat._id)}
                             ml={3}
                           >
                             Delete

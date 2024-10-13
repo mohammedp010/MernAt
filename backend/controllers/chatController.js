@@ -65,24 +65,29 @@ const fetchChats = asyncHandler(async (req, res) => {
     }
 });
 
-const deleteChat = asyncHandler(async (req,res) => {
+const deleteChat = asyncHandler(async (req, res) => {
     const { chatId } = req.body;
-
-  try {
-    const chat = await Chat.findById(chatId);
-
-    if (!chat) {
-      return res.status(404).json({ error: 'Chat not found' });
+  
+    try {
+      const chat = await Chat.findById(chatId);
+  
+      if (!chat) {
+        return res.status(404).json({ error: 'Chat not found' });
+      }
+      // Check if the chat is not a group chat
+    //   if (chat.isGroupChat) {
+    //     return res.status(400).json({ error: 'Cannot delete group chats' });
+    //   }
+  
+      await chat.remove();
+  
+      return res.status(200).json({ message: 'Chat deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
-
-    await chat.remove();
-
-    return res.status(200).json({ message: 'Chat deleted successfully' });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-})
+  });
+  
 
 const createGroupChat = asyncHandler( async (req,res) => {
     if(!req.body.users || !req.body.name){

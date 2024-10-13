@@ -136,7 +136,7 @@ const Signup = () => {
         <FormLabel>Name</FormLabel>
         <Input
           placeholder="Your Name"
-          borderWidth="2px"
+          borderWidth="1px"
           borderColor="#000"
           onChange={(e) => setName(e.target.value)}
         />
@@ -145,7 +145,7 @@ const Signup = () => {
         <FormLabel>Email</FormLabel>
         <Input
           placeholder="Your Email"
-          borderWidth="2px"
+          borderWidth="1px"
           borderColor="#000"
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -155,13 +155,13 @@ const Signup = () => {
         <InputGroup>
           <Input
             type={show ? "text" : "password"}
-            borderWidth="2px"
+            borderWidth="1px"
             borderColor="#000"
             placeholder="Your Password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
-            <Button h="1.75rem" mr="1" size="sm" borderWidth="2px" borderColor="#000" onClick={handleClick}>
+            <Button h="1.75rem" mr="1" size="sm" borderWidth="1px" borderColor="#000" onClick={handleClick}>
               {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
@@ -173,13 +173,13 @@ const Signup = () => {
         <InputGroup>
           <Input
             type={show ? "text" : "password"}
-            borderWidth="2px"
+            borderWidth="1px"
             borderColor="#000"
             placeholder="Confirm Password"
             onChange={(e) => setConfirmpassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
-            <Button h="1.75rem" mr="1" size="sm" borderWidth="2px" borderColor="#000" onClick={handleClick}>
+            <Button h="1.75rem" mr="1" size="sm" borderWidth="1px" borderColor="#000" onClick={handleClick}>
               {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
@@ -189,15 +189,17 @@ const Signup = () => {
         <FormLabel>Upload your photo (Optional)</FormLabel>
         <Input
           type="file"
-          borderWidth="2px"
+          borderWidth="1px"
           borderColor="#000"
-          p={0.5}
+          p={1}
           accept="image/*"
           onChange={(e) => postDetails(e.target.files[0])}
         />
       </FormControl>
       <Button
         colorScheme="blue"
+        borderWidth="2px" 
+        borderColor="#000"
         width="100%"
         style={{ marginTop: 15 }}
         onClick={submitHandler}

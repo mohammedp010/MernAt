@@ -75,7 +75,7 @@ const Login = () => {
         <FormLabel>Email</FormLabel>
         <Input
           placeholder="Your Email"
-          borderWidth="2px"
+          borderWidth="1px"
           borderColor="#000"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -86,14 +86,14 @@ const Login = () => {
         <InputGroup>
           <Input
             type={show ? "text" : "password"}
-            borderWidth="2px"
+            borderWidth="1px"
             borderColor="#000"
             value={password}
             placeholder="Your Password"
             onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width="4.5rem">
-            <Button h="1.75rem" mr="1" size="sm" borderWidth="2px" borderColor="#000" onClick={handleClick}>
+            <Button h="1.75rem" mr="1" size="sm" borderWidth="1px" borderColor="#000" onClick={handleClick}>
               {show ? "Hide" : "Show"}
             </Button>
           </InputRightElement>
@@ -103,6 +103,7 @@ const Login = () => {
         colorScheme="blue"
         width="100%"
         style={{ marginTop: 15 }}
+        borderWidth="2px" borderColor="#000"
         onClick={submitHandler}
         isLoading={loading}
       >
@@ -111,6 +112,7 @@ const Login = () => {
       <Button
         variant="solid"
         colorScheme="green"
+        borderWidth="2px" borderColor="#000"
         width="100%"
         onClick={() => {
           setEmail("guest@example.com");

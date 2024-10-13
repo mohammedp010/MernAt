@@ -51,9 +51,9 @@ const HomePage = () => {
         </Box>
         <Box bg="white" w="100%" p={4} borderRadius="lg" bgColor="#C9D1D5">
           <Tabs variant="soft-rounded">
-            <TabList mb="1em">
-              <Tab width="50%">Login</Tab>
-              <Tab width="50%">Sign-up</Tab>
+            <TabList mb="1em" gap="1">
+              <Tab width="50%" borderWidth="1px" borderColor="#000">Login</Tab>
+              <Tab width="50%" borderWidth="1px" borderColor="#000">Sign-up</Tab>
             </TabList>
 
             <TabPanels>
